@@ -181,7 +181,7 @@ src="https://www.facebook.com/tr?id=1614664920104673&ev=PageView&noscript=1"
   window.addEventListener("scroll", markHuman, {passive:true});
 
   // Subscribe: sirf ek baar, bot filter ke saath
-  // source = "click" (button) ya "timer" (auto redirect)
+  // sirf button click par fire hota hai
   // return true = event gaya
   function fireEventOnce(e, source){
     if (hasFlag(KEY_EVT)) return false;                 // Condition 4: pehle lag chuka
@@ -191,7 +191,6 @@ src="https://www.facebook.com/tr?id=1614664920104673&ev=PageView&noscript=1"
       if (Date.now() - loadTime < 800) return false;    // bahut jaldi click
       if (e && e.isTrusted === false) return false;     // script se fake click
     }
-    if (source === "timer" && !isVisible()) return false; // Condition 2: page screen par nahi
     if (typeof fbq !== "function") return false;
     fbq("track","Subscribe",{},{eventID:"rtt_sub_"+loadTime});
     setFlag(KEY_EVT);
@@ -235,8 +234,7 @@ src="https://www.facebook.com/tr?id=1614664920104673&ev=PageView&noscript=1"
     if (left <= 0){
       clearInterval(countdown);
       leaving = true;
-      var sent = fireEventOnce(null, "timer");
-      setTimeout(goTelegram, sent ? EVENT_DELAY_MS : 0);
+      goTelegram(); // timer se jaane walon par koi Subscribe event NAHI (sirf button click par)
     }
   }, 1000);
 })();
